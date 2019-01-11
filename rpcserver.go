@@ -4240,6 +4240,12 @@ func handleGetWorkSubmission(s *rpcServer, hexData string) (interface{}, error) 
 		copy(pkScriptCopy, blockInfo.pkScript)
 		msgBlock.Transactions[0].TxOut[1].PkScript = blockInfo.pkScript
 		merkles := blockchain.BuildMerkleTreeStore(tempBlock.Transactions())
+		
+		rpcMerkleRoot := submittedHeader.MerkleRoot
+		oldMerkleRoot := msgBlock.Header.MerkleRoot
+		newMerkleRoot := *merkles[len(merkles)-1]
+		rpcsLog.Infof("rpcMerkleRoot: %s, oldMerkleRoot: %s, newMerkleRoot: %s", rpcMerkleRoot, oldMerkleRoot, newMerkleRoot)
+		
 		msgBlock.Header.MerkleRoot = *merkles[len(merkles)-1]
 	}
 
